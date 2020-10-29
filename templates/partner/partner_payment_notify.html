@@ -1,0 +1,234 @@
+{% extends "common/base_pdf.html" %}
+{% load humanize %}
+
+{% block styles %}
+table {
+    border-image: initial;
+    margin: -10px auto 20px;
+}
+table td {
+    padding: 2px 3px;
+}
+table .title {
+    font-size: 20pt;
+    text-align: center;
+    text-decoration: underline;
+}
+table .company_name {
+    font-size: 18px;
+    text-decoration: underline;
+    font-weight: bold;
+}
+table .client_name {
+    font-size: 18px;
+    font-weight: bold;
+}
+{% endblock %}
+
+{% block content %}
+    {% if data.heading %}
+        <table>
+            <tr>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+                <td style="width: 45px;"></td>
+            </tr>
+            <tr>
+                <td colspan="17"></td>
+                <td colspan="2">検収番号</td>
+                <td colspan="2">{{ data.request.payment_notice_no }}</td>
+            </tr>
+            <tr>
+                <th class="title" colspan="21">
+                    {{ data.request.year }}年{{ data.request.month }}月度検収兼お支払通知書
+                </th>
+            </tr>
+            <tr><td colspan="21">&nbsp;</td></tr>
+            <tr>
+                <td colspan="21" class="company_name">
+                    {{ data.heading.company_name }}&nbsp;&nbsp;&nbsp;&nbsp;殿
+                </td>
+            </tr>
+            <tr><td colspan="21">&nbsp;</td></tr>
+            <tr>
+                <td colspan="13">下記の通り、お支払いいたします。</td>
+                <td colspan="8" class="client_name signature">
+                    {{ data.heading.client_name }}
+                    <img src="{{ company_signature }}" alt>
+                </td>
+            </tr>
+            <tr><td colspan="21">&nbsp;</td></tr>
+            <tr>
+                <td colspan="2">作成日付</td>
+                <td colspan="11">{{ data.heading.created_dt|date:'Y/m/d' }}</td>
+                <td colspan="8">
+                    〒{{ data.heading.client_post_code1 }}
+                    ー{{ data.heading.client_post_code2 }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">検収日付</td>
+                <td colspan="11">{{ data.heading.publish_date|date:'Y/m/d' }}</td>
+                <td colspan="8">
+                    {{ data.heading.client_address1|default:'' }}
+                    {{ data.heading.client_address2|default:'' }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">支払方法</td>
+                <td colspan="11">銀行振込</td>
+                <td colspan="8">
+                    TEL: {{ data.heading.client_tel }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    FAX: {{ data.heading.client_fax }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">お支払日</td>
+                <td colspan="19">ご登録支払サイト日</td>
+            </tr>
+            <tr class="bordered" style="height: 28px;">
+                <td colspan="11" class="bordered-none"></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2" class="bordered-right"></td>
+            </tr>
+            <tr class="bold bordered" style="height: 60px;">
+                <td colspan="4" style="border: 2px solid black; font-size: 15px; padding: 5px 2px;">合計金額</td>
+                <td colspan="4" style="border: 2px solid black; font-size: 15px; padding: 5px 2px; border-left: 0; text-align: right;">
+                    ￥{{ data.request.amount|floatformat:"0"|intcomma }}
+                </td>
+                <td colspan="3" class="bordered-none"></td>
+                <td colspan="2" class="bordered-bottom"></td>
+                <td colspan="2" class="bordered-bottom"></td>
+                <td colspan="2" class="bordered-bottom"></td>
+                <td colspan="2" class="bordered-bottom"></td>
+                <td colspan="2" class="bordered-bottom bordered-right"></td>
+            </tr>
+            <tr><td colspan="21">&nbsp;</td></tr>
+            <tr class="bordered" style="height: 30px;">
+                <th>番号</th>
+                <th colspan="6">名前</th>
+                <th colspan="2">数量</th>
+                <th colspan="2">単位</th>
+                <th colspan="2">単価</th>
+                <th colspan="3">金額</th>
+                <th colspan="2">諸経費</th>
+                <th class="bordered-right" colspan="3">合計</th>
+            </tr>
+            {% for item in data.details %}
+                {% if item.item_no %}
+                    <tr class="bordered">
+                        <td class="align-center" rowspan="4">{{ item.item_no }}</td>
+                        <td class="align-left" colspan="6">
+                            {% if item.item_name %}{{ item.item_name }}{% else %}一括{% endif %}
+                        </td>
+                        <td class="align-right" colspan="2">{{ item.item_total_hours }}</td>
+                        <td class="align-right" colspan="2">{% if item %}時間{% endif %}</td>
+                        <td class="align-right" colspan="2">
+                            {% if data.heading.is_hourly_pay %}
+                                <!-- 時給の場合、時給の表示する。 -->
+                                {{ item.is_hourly_pay|intcomma }}
+                            {% else %}
+                                {{ item.item_basic_amount|intcomma }}
+                            {% endif %}
+                        </td>
+                        <td class="align-right" colspan="3">{{ item.item_turnover_amount|intcomma }}</td>
+                        <td class="align-right" colspan="2">{{ 0|intcomma }}</td>
+                        <td class="align-right bordered-right" colspan="3">{{ item.item_turnover_amount|add:0|intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="13" class="bordered-left bordered-top">
+                            件名：&nbsp;&nbsp;{% if item.project_member %}{{ item.project_member.project }}{% else %}{{ item.project }}{% endif %}
+                        </td>
+                        <td class="bordered-right bordered-top" colspan="7">発注伝票番号：&nbsp;
+                            {% if item.order %}
+                                {{ item.order.order_no }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="bordered-left">
+                            超過金額：
+                            {% if data.heading.is_hourly_pay %}
+                                <!-- 時給の場合、０を表示。 -->
+                            {% else %}
+                                ¥{{ item.item_plus_amount|intcomma }}
+                            {% endif %}
+                        </td>
+                        <td colspan="15" class="bordered-right">
+                            控除金額：
+                            {% if data.heading.is_hourly_pay %}
+                                <!-- 時給の場合、０を表示。 -->
+                            {% else %}
+                                ¥{{ item.item_minus_amount|intcomma }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="bordered-left">下限：&nbsp;&nbsp;{{ item.item_min_hours }}時間</td>
+                        <td colspan="4">上限：&nbsp;&nbsp;{{ item.item_max_hours|stringformat:'d' }}時間</td>
+                        <td colspan="2">控除単価：</td>
+                        <td colspan="3">
+                            {% if data.heading.is_hourly_pay %}
+                                <!-- 時給の場合、０を表示。 -->
+                            {% else %}
+                                ¥{{ item.item_minus_per_hour|intcomma }}
+                            {% endif %}
+                        </td>
+                        <td colspan="2">超過単価：</td>
+                        <td class="bordered-right" colspan="5">
+                            {% if data.heading.is_hourly_pay %}
+                                <!-- 時給の場合、０を表示。 -->
+                            {% else %}
+                                ¥{{ item.item_plus_per_hour|intcomma }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            <tr class="bordered">
+                <td colspan="11" rowspan="4"></td>
+                <td colspan="4" class="align-center">本体価格</td>
+                <td colspan="3" class="align-right">{{ data.request.turnover_amount|floatformat:"0"|intcomma|default:0 }}</td>
+                <td colspan="3" rowspan="4"></td>
+            </tr>
+            <tr class="bordered">
+                <td class="align-center" colspan="4">消費税等</td>
+                <td class="align-right bordered-right-none" colspan="3">{{ data.request.tax_amount|floatformat:"0"|intcomma|default:0 }}</td>
+            </tr>
+            <tr class="bordered">
+                <td class="align-center" colspan="4">諸経費計</td>
+                <td class="align-right bordered-right-none" colspan="3">{{ data.request.expense_amount|floatformat:"0"|intcomma|default:0 }}</td>
+            </tr>
+            <tr class="bordered">
+                <td class="align-center" colspan="4">合計</td>
+                <td class="align-right bordered-right-none" colspan="3">{{ data.request.amount|floatformat:"0"|intcomma|default:0 }}</td>
+            </tr>
+            <tr><td colspan="21" class="bordered-top">&nbsp;</td></tr>
+        </table>
+    {% else %}
+        <div class="align-center empty">
+            履歴情報がありません！
+        </div>
+    {% endif %}
+{% endblock %}

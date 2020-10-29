@@ -1,0 +1,93 @@
+<tr class="bordered">
+    <td colspan="2" class="align-center">業務名称</td>
+    <td colspan="7">
+        {{ data.heading.project_name }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">作業期間</td>
+    <td colspan="7">
+        {{ data.heading.work_start_date }} ～ {{ data.heading.work_end_date }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">委託業務責任者（甲）</td>
+    <td colspan="3">
+        {{ data.heading.company_manager|default:'' }}
+    </td>
+    <td colspan="2" class="align-center">連絡窓口担当者（甲）</td>
+    <td colspan="2">
+        {{ data.heading.company_middleman|default:'' }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">委託業務責任者（乙）</td>
+    <td colspan="3">
+        {{ data.heading.client_manager|default:'' }}
+    </td>
+    <td colspan="2" class="align-center">連絡窓口担当者（乙）</td>
+    <td colspan="2">
+        {{ data.heading.client_middleman|default:'' }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">作業責任者</td>
+    <td colspan="7">
+        {{ data.details.0.item_name }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">業務委託料金</td>
+    <td colspan="7">
+        {% for detail in data.details %}
+            {% if detail.is_hourly_pay %}
+                <br/>
+                {{ detail.item_basic_amount_memo|default:'' }}
+                <br/>
+                {% if detail.item_amount_other_memo %}
+                    {{ detail.item_amount_other_memo }}
+                {% endif %}
+                <br/><br/>作業報告書に基づく稼動実費精算とする。<br/>
+            {% elif detail.is_fixed_pay %}
+                <br/><br/>
+                {{ detail.item_basic_amount_memo|default:'' }}
+                <br/><br/><br/><br/>
+            {% else %}
+                {{ detail.item_basic_amount_memo|default:'' }}<br/>
+                {{ detail.item_minus_per_hour_memo|default:'' }}<br/>
+                {{ detail.item_plus_per_hour_memo|default:'' }}<br/>
+                <br/>
+                {{ detail.item_hours_memo|default:'' }}<br/>
+                {% if detail.item_amount_other_memo %}
+                    {{ detail.item_amount_other_memo }}<br/>
+                {% endif %}
+                {{ detail.item_comment|default:'' }}<br/>
+                作業報告書に基づく稼動実費精算とする。
+            {% endif %}
+        {% endfor %}
+        <br/>
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">作業場所</td>
+    <td colspan="7">
+        {{ data.heading.work_location }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">納入物件</td>
+    <td colspan="7">
+        {{ data.heading.delivery_properties }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">支払条件</td>
+    <td colspan="7">
+        <div style="min-height: 135px; white-space: pre;">{{ data.heading.payment_condition }}</div>
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="9" class="bordered-bottom">
+        <div style="min-height: 170px; white-space: pre-line;">{{ data.heading.contract_items }}</div>
+    </td>
+</tr>

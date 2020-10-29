@@ -1,0 +1,336 @@
+{% extends "common/base_pdf.html" %}
+{% load humanize %}
+
+{% block styles %}
+    table.main tr td ,
+    table.main tr th {
+        height: 15px;
+        border-right: 1px solid #2750a2;
+    }
+    table.main {
+        font-size: 12px;
+        border-spacing: 0;
+        margin: 0 auto;
+    }
+    table.main td {
+        text-align: right;
+    }
+    table.main th {
+        color: #41444f;
+        background-color: #a8bbe7;
+        border-top: 1px solid #2750a2;
+        border-bottom: 1px solid #2750a2;
+    }
+    table.main th.highlight {
+        color: white;
+        background-color: #2750a2;
+    }
+    table.main th:first-child ,
+    table.main td:first-child {
+        border-left: 1px solid #2750a2;
+    }
+    table.main tr:last-child td {
+        border-bottom: 1px solid #2750a2;
+    }
+{% endblock %}
+{% block content %}
+    <table class="main">
+        <colgroup style="height: 0;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+            <col style="width: 45px;">
+        </colgroup>
+        <tr>
+            <td rowspan="3" colspan="4" style="text-align: center; border-left: none">
+                <span style="font-weight: bold; font-size: 22px;">給 与 明 細 書</span><br/>
+                <span style="font-weight: bold;">{{ data.year }}年{{ data.month }}月</span>
+            </td>
+            <th colspan="3" style="color: #3f5fa0;">所 属－社 員 No.</th>
+            <th colspan="7" style="color: #3f5fa0;">氏&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</th>
+            <td rowspan="3" colspan="4"></td>
+            <th colspan="2" class="highlight">差 引 支 給 額</th>
+        </tr>
+        <tr>
+            <td colspan="3" style="border-left: none;"></td>
+            <td colspan="7"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center; border-left: none;">{{ data.code }}</td>
+            <td colspan="7" class="align-right">
+                <span style="font-size: 13px; font-weight: bold;">{{ data.name }}</span>&nbsp;
+                <span style="color: #3f5fa0; font-size: 14px; font-weight: bold;">殿</span>
+            </td>
+            <td colspan="2">{{ data.deduction_amount|intcomma }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">基本給</th>
+            <th colspan="2">業務手当</th>
+            <th colspan="2">住宅手当</th>
+            <th colspan="2">地域手当</th>
+            <th colspan="2"></th>
+            <th colspan="2">通勤手当</th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2">現　　　金</th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ data.base_allowance|intcomma }}</td>
+            <td colspan="2">{{ data.position_allowance|intcomma }}</td>
+            <td colspan="2">{{ data.house_allowance|intcomma }}</td>
+            <td colspan="2">{{ data.region_allowance|intcomma }}</td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.traffic_allowance|intcomma }}</td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.cash_payment|intcomma }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">時間外手当</th>
+            <th colspan="2">深夜手当</th>
+            <th colspan="2">法定内休出手</th>
+            <th colspan="2">法定外休出手</th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ data.overtime_allowance|intcomma }}</td>
+            <td colspan="2">{{ data.night_allowance|intcomma }}</td>
+            <td colspan="2">{{ data.legal_holiday|intcomma }}</td>
+            <td colspan="2">{{ data.non_statutory_holiday|intcomma }}</td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">0</td>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2">欠勤手当</th>
+            <th colspan="2">遅早控除</th>
+            <th colspan="2">追給</th>
+            <th colspan="2">臨時１～４</th>
+            <th colspan="2">臨時５～８</th>
+            <th colspan="2"></th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.supplementary_taxable_payment|intcomma }}</td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.leave_deduction|intcomma }}</td>
+            <td colspan="2">{{ data.late_early_deduction|intcomma }}</td>
+            <td colspan="2">{{ data.supplementary_no_taxable_payment|intcomma }}</td>
+            <td colspan="2">{{ data.tmp_allowance_1_4|intcomma }}</td>
+            <td colspan="2">{{ data.tmp_allowance_5_8|intcomma }}</td>
+            <td colspan="2">0</td>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2" class="highlight">支 給 総 額</th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.salary|intcomma }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">健康保険料</th>
+            <th colspan="2">介護保険料</th>
+            <th colspan="2" style="font-size: 11px;">厚生年金保険料</th>
+            <th colspan="2">雇用保険料</th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2" style="font-size: 11px;">社会保険料合計</th>
+            <th colspan="2"></th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ data.health_insurance|intcomma }}</td>
+            <td colspan="2">{{ data.care_insurance|intcomma }}</td>
+            <td colspan="2">{{ data.employee_pension|intcomma }}</td>
+            <td colspan="2">{{ data.employment_insurance|intcomma }}</td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.corporate_insurance_total|intcomma }}</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <th colspan="2">所得税</th>
+            <th colspan="2">住民税</th>
+            <th colspan="2">臨時控除</th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2">解税対象額</th>
+            <th colspan="2"></th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ data.income_tax|intcomma }}</td>
+            <td colspan="2">{{ data.resident_tax|intcomma }}</td>
+            <td colspan="2">{{ data.tmp_deduction|intcomma }}</td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.tax_coverage|intcomma }}</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2">年末調整</th>
+            <th colspan="2">立替経費</th>
+            <th colspan="2">立替経費調整</th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2"></th>
+            <th colspan="2" class="highlight">控 除 合 計 額</th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.year_end_adjustment|intcomma }}</td>
+            <td colspan="2">{{ data.expense_amount|intcomma }}</td>
+            <td colspan="2">{{ data.expense_amount_adjustment|intcomma }}</td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2">{{ data.deduction_total|intcomma }}</td>
+        </tr>
+    </table>
+{% endblock %}

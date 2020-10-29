@@ -1,0 +1,64 @@
+<tr>
+    <td colspan="9" style="text-align: right;">
+        <u>注文番号：{{ data.order.order_no }}</u>
+    </td>
+</tr>
+<tr>
+    <td></td>
+    <td class="bordered-left bordered-top bordered-right"></td>
+    <td colspan="7" style="text-align: right;">
+        <u>{{ data.order.publish_date }}</u>
+    </td>
+</tr>
+<tr>
+    <td></td>
+    <td class="bordered-left bordered-bottom bordered-right align-center align-top">印紙<br/>（捺印）</td>
+    <td colspan="7" style="height: 60px;"></td>
+</tr>
+<tr>
+    <td colspan="9" class="align-center" style="font-size: 24px;">
+        <b>注&nbsp;&nbsp;文&nbsp;&nbsp;請&nbsp;&nbsp;書</b>
+    </td>
+</tr>
+<tr>
+    <td colspan="9">
+        （甲）
+    </td>
+</tr>
+<tr>
+    <td colspan="9">
+        <u>
+            {{ data.heading.company_name }}&nbsp;&nbsp;
+        </u>
+        御中
+    </td>
+</tr>
+<tr>
+    <td colspan="5"></td>
+    <td colspan="4">（乙）</td>
+</tr>
+<tr>
+    <td colspan="5"></td>
+    <td colspan="4">
+        {{ data.heading.client_name }}&nbsp;&nbsp;㊞
+    </td>
+</tr>
+<tr>
+    <td colspan="5"></td>
+    <td colspan="4">
+        {{ data.heading.client_address1|default:'' }}
+    </td>
+</tr>
+<tr>
+    <td colspan="5"></td>
+    <td colspan="4">
+        {{ data.heading.client_address2|default:'' }}
+    </td>
+</tr>
+<tr>
+    <td colspan="5"></td>
+    <td colspan="4">
+        TEL:{{ data.heading.client_tel|default:'' }}&nbsp;&nbsp;
+        FAX:{{ data.heading.client_fax|default:'' }}
+    </td>
+</tr>

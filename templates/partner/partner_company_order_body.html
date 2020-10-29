@@ -1,0 +1,55 @@
+{% load humanize %}
+<tr class="bordered">
+    <td colspan="2" class="align-center">件名</td>
+    <td colspan="7">{{ data.heading.contract_name|default:'' }}</td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">契約金額</td>
+    <td colspan="7">{{ data.heading.amount_no_tax|intcomma }}</td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">消費税</td>
+    <td colspan="7">{{ data.heading.tax_amount|intcomma }}</td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">合計額</td>
+    <td colspan="7">{{ data.heading.amount_no_tax|add:data.heading.tax_amount|intcomma }}</td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">作業期間及び納期</td>
+    <td colspan="7">
+        {{ data.heading.work_start_date }} ～ {{ data.heading.work_end_date }}
+        （納期：{{ data.heading.delivery_term }}）
+    </td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">作業内容</td>
+    <td colspan="7">{{ data.heading.project_content|default:'' }}</td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">作業量</td>
+    <td colspan="7">{{ data.heading.project_workload|default:'' }}</td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" class="align-center">納入成果物</td>
+    <td colspan="7">{{ data.heading.project_result|default:'' }}</td>
+</tr>
+<tr class="bordered">
+    <td colspan="2" rowspan="2" class="align-center bordered-bottom">主管部署<br/>及び納入場所</td>
+    <td>住所</td>
+    <td colspan="6">
+        {{ data.heading.company_address1|default:'' }}
+        {{ data.heading.company_address2|default:'' }}
+    </td>
+</tr>
+<tr class="bordered">
+    <td class="bordered-bottom">部署</td>
+    <td colspan="6" class="bordered-bottom">{{ data.heading.company_name }}</td>
+</tr>
+<tr><td colspan="9">&nbsp;</td></tr>
+<tr><td colspan="9" class="align-center" style="border: 1px solid #000000; border-bottom: double;">備考</td></tr>
+<tr>
+    <td colspan="9" style="border: 1px solid; border-top: 0;">
+        <div style="min-height: 155px; white-space: pre;">{{ data.heading.contract_comment|default:'' }}</div>
+    </td>
+</tr>

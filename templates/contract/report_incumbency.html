@@ -1,0 +1,238 @@
+{% load humanize %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>在職証明書</title>
+
+    <script type="text/javascript">
+        function on_show_content(obj, targetId) {
+            if (obj.checked) {
+                document.getElementById(targetId).style.display = '';
+            } else {
+                document.getElementById(targetId).style.display = 'none';
+            }
+        }
+        /**
+         * 値を手動で変更できるように
+         * @param obj
+         * @param target_id
+         * @param comma カン区切りなのか
+         */
+        function change_content(obj, target_id, comma) {
+            let val = obj.value;
+            if (comma === true) {
+                val = numberWithCommas(val);
+            }
+            if (val !== "") {
+                document.getElementById(target_id).innerText = val;
+            }
+        }
+        function numberWithCommas(x) {
+            if (x === '' || x === null || x === undefined) {
+                return 0
+            } else {
+                x = parseInt(x);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+        }
+    </script>
+    <style type="text/css">
+        article {
+            width: 800px;
+            margin: 0 auto;
+            padding-top: 0;
+            font-size: 15px;
+            border: 1px solid black;
+        }
+        table {
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            font-size: 40px;
+            margin-top: 120px;
+        }
+        table.middle {
+            margin-top: 100px;
+            width: 100%;
+        }
+        table.middle td {
+            line-height: 35px;
+        }
+        table.middle td.left_side {
+            width: 40%;
+            text-align: right;
+        }
+        table.middle td.right_side {
+            width: 60%;
+        }
+        table.bottom {
+            margin-top: 120px;
+            margin-bottom: 50px;
+        }
+        table.bottom td {
+            line-height: 25px;
+        }
+        table.bottom td.left_side {
+            width: 55%;
+            text-align: right;
+        }
+        table.bottom td.right_side {
+            width: 45%;
+        }
+        div.income {
+            margin: 20px 150px;
+        }
+        div.dashboard-control {
+            font-size: 14px;
+            float: left;
+            position: fixed;
+            left: 20px;
+            top: 100px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        @media print {
+            div.dashboard-control {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+{% now 'Y' as year %}
+{% now 'm' as curr_month %}
+{% now 'd' as curr_day %}
+<article>
+    <h1>在 職 証 明 書</h1>
+    <div style="min-height: 300px;">
+        <table class="middle">
+            <tr>
+                <td class="left_side">住　　　　　所 ： </td>
+                <td class="right_side">{{ member.address1|default:'' }}<br/>{{ member.address2|default:'' }}</td>
+            </tr>
+            <tr>
+                <td class="left_side">氏　　　　　名 ： </td>
+                <td class="right_side">{{ member }}&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% if member.first_name_en and member.last_name_en %}
+                        <span style="text-transform: uppercase;">({{ member.last_name_en }}&nbsp;{{ member.first_name_en }})
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr id="tr_common_name" style="display: none;">
+                <td class="left_side">通　　称　　名 ： </td>
+                <td class="right_side">
+                    {{ member.common_last_name|default:'' }}
+                    {{ member.common_first_name|default:'' }}
+                    &nbsp;&nbsp;&nbsp;
+                    {% if member.common_first_name_ja and member.common_last_name_ja %}
+                        <span style="text-transform: uppercase;">({{ member.common_last_name_ja }}&nbsp;{{ member.common_first_name_ja }})
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="left_side">生　年　月　日 ： </td>
+                <td class="right_side">{{ member.birthday|default:'' }}</td>
+            </tr>
+            <tr>
+                <td class="left_side">就 職　年 月 日 ： </td>
+                <td class="right_side">
+                    {{ member.join_date }}
+                </td>
+            </tr>
+            <tr id="tr_position">
+                <td class="left_side">職　務　位　置 ： </td>
+                <td class="right_side"><span id="span_position">{{ contract_items.0002|default:'' }}</span></td>
+            </tr>
+            <tr id="tr_business_type">
+                <td class="left_side">業　務　種　類 ： </td>
+                <td class="right_side">
+                    <span id="span_business_type">
+                        {% if contract_items.0005|default:'' == '' %}
+                            {{ contract_items.0004|default:'' }}
+                        {% else %}
+                            {{ contract_items.0005|default:'' }}
+                        {% endif %}
+                    </span>
+                </td>
+            </tr>
+            <tr id="tr_member_type">
+                <td class="left_side">雇　用　形　態 ： </td>
+                <td class="right_side">{{ contract.get_contract_type_display|default:'' }}</td>
+            </tr>
+            <tr>
+                <td class="left_side">会 社　所 在 地 ： </td>
+                <td class="right_side">{{ company.address1|default:'' }}{{ company.address2|default:'' }}</td>
+            </tr>
+        </table>
+    </div>
+    <div style="height: 112px;">
+        <div class="income" id="div_income_yearly">
+            <span id="span_income_year">{{ year }}</span>
+            年分年収<span id="span_is_confirmed">予定</span>額：￥
+            <span id="span_income_yearly">{{ contract.get_salary_yearly|intcomma }}</span>
+            円（課税前）とする。<br/>
+            交通費また時間外手当などについて、別途となります。
+        </div>
+        <div class="income" id="div_income_monthly" style="display: none;">
+            月収額：￥<span id="span_income_monthly">{{ contract.get_salary_monthly|intcomma }}</span>円/月（課税前）とする。<br/>
+            交通費また時間外手当などについて、別途となります。
+        </div>
+    </div>
+    <div style="margin: 10px 150px 10px 100px;">上記の者、在職していることを証明します。</div>
+    <div style="margin: 0 150px 0 150px; text-align: right;">
+        {{ year }}&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;
+        {% if curr_month|slice:':1' == '0' %}{{ curr_month|slice:'1:' }}{% else %}{{ curr_month }}{% endif %}&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;
+        {% if curr_day|slice:':1' == '0' %}{{ curr_day|slice:'1:' }}{% else %}{{ curr_day }}{% endif %}&nbsp;&nbsp;&nbsp;日
+    </div>
+    <table class="bottom">
+        <tr>
+            <td class="left_side">住　　　所 :</td>
+            <td class="right_side">{{ company.address1|default:'' }}{{ company.address2|default:'' }}</td>
+        </tr>
+        <tr>
+            <td class="left_side">会　社　名 :	</td>
+            <td class="right_side">{{ company }}</td>
+        </tr>
+    </table>
+    <div class="dashboard-control">
+        <div>
+            <label for="chk_position">職務位置</label>
+            <input id="chk_position" type="checkbox" checked="checked" onchange="on_show_content(this, 'tr_position')"/>
+            <input type="text" style="width: 165px;" onchange="change_content(this, 'span_position', false)"
+                   value="{{ contract_items.0002|default:'' }}"/>
+        </div>
+        <div>
+            <label for="chk_business_type">業務種類</label>
+            <input id="chk_business_type" type="checkbox" checked="checked"
+                   onchange="on_show_content(this, 'tr_business_type')"/>
+            <input type="text" style="width: 165px;" onchange="change_content(this, 'span_business_type', false)"
+                   value="{{ contract_items.0004|default:'' }}"/>
+        </div>
+        <div>
+            <label for="chk_member_type">雇用形態</label>
+            <input id="chk_member_type" type="checkbox" checked="checked" onchange="on_show_content(this, 'tr_member_type')"/>
+        </div>
+        <div>
+            <label for="chk_common_name">通&nbsp;称&nbsp;名&nbsp;</label>
+            <input id="chk_common_name" type="checkbox" onchange="on_show_content(this, 'tr_common_name')" />
+        </div>
+        <div>
+            <label for="chk_income_yearly">年　　収</label>
+            <input id="chk_income_yearly" type="checkbox" checked="checked" onchange="on_show_content(this, 'div_income_yearly')"/>
+            <input type="number" style="width: 100px; text-align: right;" onchange="change_content(this, 'span_income_yearly', true)" value="{{ contract.get_salary_yearly }}"/>
+            <input type="number" style="width: 60px; text-align: right;" onchange="change_content(this, 'span_income_year', false)" value="{{ year }}"/>
+        </div>
+        <div>
+            <label for="chk_income_monthly">月　　収</label>
+            <input id="chk_income_monthly" type="checkbox" onchange="on_show_content(this, 'div_income_monthly')"/>
+            <input type="number" style="width: 100px; text-align: right;" onchange="change_content(this, 'span_income_monthly', true)" value="{{ contract.get_salary_monthly }}"/>
+        </div>
+    </div>
+</article>
+</body>
+</html>

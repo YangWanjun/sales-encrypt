@@ -1,0 +1,211 @@
+{% load humanize %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>雇用契約書</title>
+
+    <style type="text/css">
+        article {
+            width: 720px;
+            margin: 0 auto;
+            padding-top: 0;
+            font-size: 14px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 0;
+        }
+        table {
+            width: 100%;
+            border-spacing: 0;
+        }
+        table th {
+            background-color: #eee;
+            font-weight: normal;
+        }
+        table td {
+            padding: 0 5px;
+        }
+        div.tail {
+            width: 250px;
+            border-bottom: 1px solid black;
+            padding: 5px 5px 2px 5px;
+        }
+    </style>
+</head>
+<body>
+<article>
+    <h1>雇 用 契 約 書</h1>
+    <div>
+        <u>{{ member }} 殿</u>
+        <div>貴殿を雇用するに当たっての条件は次の通りです。</div>
+    </div>
+    <table border="1">
+        <tbody>
+            <tr>
+                <th style="width: 100px;">雇用形態</th>
+                <td>{{ contract.get_contract_type_display }}</td>
+                <th>所属部署</th>
+                <td style="width: 140px;">
+                    {% if contract.organization.org_type == '03' %}
+                        {{ contract.organization.parent.name }}&nbsp;{{ contract.organization.name }}
+                    {% else %}
+                        {{ contract.organization|default:'' }}
+                    {% endif %}
+                </td>
+                <th>職位</th>
+                <td style="width: 200px;">{{ contract_items.0002|default:'' }}</td>
+            </tr>
+            <tr>
+                <th>雇用日</th>
+                <td colspan="5">{{ contract.start_date }}</td>
+            </tr>
+            <tr>
+                <th>雇用期間</th>
+                <td colspan="5">
+                    {% if contract.contract_type == "0001" %}
+                    {% elif contract.start_date and contract.end_date %}
+                        {{ contract.start_date }} ～ {{ contract.end_date }}
+                    {% endif %}
+                    {{ contract_items.0001 }}
+                </td>
+            </tr>
+            <tr>
+                <th>就業の場所<br/>業務の種類</th>
+                <td colspan="5" style="padding: 1px 5px;">
+                    {{ contract_items.0003 }}<br/>
+                    {% if contract_items.0004 == 'その他' %}
+                        {% if contract_items.0005 %}
+                            業務の種類（{{ contract_items.0005 }}）<br/>
+                        {% else %}
+                            業務の種類（{{ contract_items.0004 }}）<br/>
+                        {% endif %}
+                    {% else %}
+                        業務の種類（{{ contract_items.0004|default:'' }}）<br/>
+                    {% endif %}
+                    <div style="white-space: pre-line">{{ contract_items.0006 }}</div>
+                </td>
+            </tr>
+            <tr>
+                <th>就業時間</th>
+                <td colspan="5" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.0007 }}</div>
+                </td>
+            </tr>
+            <tr>
+                <th rowspan="6">給　　与</th>
+                <th>基本給</th>
+                <td colspan="4">
+                    {% for allowance in contract_base_salaries %}
+                        <div>¥{{ allowance.amount|intcomma }}{{ allowance.get_unit_display }}&nbsp;{{ allowance.comment|default:'' }}</div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>諸手当</th>
+                <td colspan="4" style="padding: 1px 5px;">
+                    {% for allowance in contract_allowances %}
+                        <div>
+                            {{ allowance.name }} :
+                            {% if allowance.amount %}
+                                ¥{{ allowance.amount|intcomma }}{{ allowance.get_unit_display }}&nbsp;
+                            {% endif %}
+                            {{ allowance.comment|default:'' }}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>社会保険</th>
+                <td colspan="4" style="padding: 1px 5px;">
+                    健康保険 : {% if contract.has_health_insurance %}加入する{% else %}加入しない{% endif %}
+                    &nbsp;&nbsp;
+                    厚生年金 : {% if contract.has_employee_pension %}加入する{% else %}加入しない{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>労働保険</th>
+                <td colspan="4" style="padding: 1px 5px;">
+                    雇用保険 : {% if contract.has_employment_insurance %}加入する{% else %}加入しない{% endif %}
+                    &nbsp;&nbsp;
+                    労災保険 : {% if contract.has_injury_insurance %}加入する{% else %}加入しない{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>給与締切日<br/>および支払日</th>
+                <td colspan="4" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.0200|default:'' }}</div>
+                </td>
+            </tr>
+            <tr>
+                <th>昇給および<br/>降給</th>
+                <td colspan="4" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.0201|default:'' }}</div>
+                </td>
+            </tr>
+            {% if contract_items.0202 %}
+                <tr>
+                    <th>賞　　与</th>
+                    <td colspan="5" style="padding: 1px 5px;">
+                        <div style="white-space: pre-line">{{ contract_items.0202|default:'' }}</div>
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>休　　日</th>
+                <td colspan="5" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.0300|default:'' }}</div>
+                </td>
+            </tr>
+            {% if contract.contract_type == "0001" %}
+            <tr>
+                <th>有給休暇</th>
+                <td colspan="5" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.0301|default:'' }}</div>
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>無給休暇</th>
+                <td colspan="5" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.0302|default:'' }}</div>
+                </td>
+            </tr>
+            <tr>
+                <th>退職に関する<br/>事　項</th>
+                <td colspan="5" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.0800|default:'' }}</div>
+                </td>
+            </tr>
+            <tr>
+                <th>備　　考</th>
+                <td colspan="5" style="padding: 1px 5px;">
+                    <div style="white-space: pre-line">{{ contract_items.9900|default:'' }}
+                    </div></td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="padding: 10px;">
+        <div style="margin-left: 20px;">契約日:{{ contract.contract_date }}</div>
+        <div style="text-align: right;">会社および従業員は、上記の雇用条件について確認のうえ、同意いたします。</div>
+        <div>
+            <div class="tail" style="float: left;">{{ company.name }}</div>
+            <div class="tail" style="float: right;">
+                従業員
+                <span style="float:right;">㊞</span>
+            </div>
+        </div>
+        <div>
+            <div class="tail" style="float: left;">
+                代表取締役&nbsp;&nbsp;&nbsp;&nbsp;{{ company.president|default:'' }}
+                <span style="float:right;">㊞</span>
+            </div>
+            <div class="tail" style="float: right;">住所</div>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</article>
+</body>
+</html>

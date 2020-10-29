@@ -1,0 +1,348 @@
+{% extends "common/base_pdf.html" %}
+{% load humanize %}
+
+{% block styles %}
+table.request {
+    margin: -10px auto 20px;
+    border-bottom: 1px solid black;
+}
+table.request tr {
+    height: 20px;
+}
+table.request .title {
+    font-size: 20pt;
+    text-align: center;
+    text-decoration: underline;
+}
+table.request td.title2 {
+    font-size: 14pt;
+    font-weight: bold;
+    text-decoration: underline;
+}
+div.signature {
+    position: absolute;
+    border: 1px solid gray;
+    width: 269px;
+    height: 86px;
+}
+div.signature div.sub_signature {
+    width: 85px;
+    height: 80px;
+    border: 1px solid gray;
+    float: left;
+    margin: 2px 0 2px 2px;
+}
+{% endblock %}
+
+{% block content %}
+    <!-- 署名欄 -->
+    <div class="signature" style="left: 615px; top: 430px;">
+        <div class="sub_signature"></div>
+        <div class="sub_signature"></div>
+        <div class="sub_signature"></div>
+        <div class="clear"></div>
+    </div>
+    {% if data %}
+    <table class="request">
+        <tr>
+            <td style="width: 45px;"></td>
+            <td style="width: 29px;"></td>
+            <td style="width: 29px;"></td>
+            <td style="width: 30px;"></td>
+            <td style="width: 30px;"></td>
+            <td style="width: 30px;"></td>
+            <td style="width: 88px;"></td>
+            <td style="width: 91px;"></td>
+            <td style="width: 45px;"></td>
+            <td style="width: 128px;"></td>
+            <td style="width: 45px;"></td>
+            <td style="width: 45px;"></td>
+            <td style="width: 58px;"></td>
+            <td style="width: 114px;"></td>
+            <td style="width: 105px;"></td>
+        </tr>
+        <tr>
+            <th class="title" colspan="15">　　御　請　求　書　　</th>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr>
+            <td colspan="11">
+                〒{{ data.heading.client_post_code1|default:'' }}
+                -{{ data.heading.client_post_code2|default:'' }}
+            </td>
+            <td colspan="2">請求番号</td>
+            <td colspan="2">{{ data.request.request_no }}</td>
+        </tr>
+        <tr>
+            <td colspan="11">
+                {{ data.heading.client_address1|default:'' }}
+                {{ data.heading.client_address2|default:'' }}
+            </td>
+            <td colspan="2">発  行 日</td>
+            <td colspan="2">{{ data.heading.publish_date }}</td>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr>
+            <td colspan="15">Tel: {{ data.heading.client_tel|default:'' }}</td>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr>
+            <td colspan="15" class="title2">{{ data.heading.client_name }}&nbsp;&nbsp;御中</td>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr>
+            <td colspan="11">　下記のとおりご請求申し上げます。</td>
+            <td colspan="4">
+                〒{{ data.heading.company_post_code1|default:'' }}
+                -{{ data.heading.company_post_code2|default:'' }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="11"></td>
+            <td colspan="4">
+                {{ data.heading.company_address1|default:'' }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" class="title3">御請求額 ：</td>
+            <td colspan="8" class="title2">￥{{ data.request.amount|floatformat:"0"|intcomma }}円</td>
+            <td colspan="4">{{ data.heading.company_address2|default:'' }}</td>
+        </tr>
+        <tr>
+            <td colspan="11"></td>
+            <td colspan="4">{{ data.heading.company_name }}</td>
+        </tr>
+        <tr>
+            <td colspan="3">作業期間</td>
+            <td colspan="8">{{ data.heading.work_start_date|date:'Y年m月d日' }} ～ {{ data.heading.work_end_date|date:'Y年m月d日' }}</td>
+            {% if data.is_partner_request and not data.is_self_employee %}
+            <td colspan="4">代表取締役　　{{ data.heading.company_master|default:'' }}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td colspan="11"></td>
+            <td colspan="4">TEL: {{ data.heading.company_tel|default:'' }}</td>
+        </tr>
+        {% if data.is_partner_request %}
+            <!-- 協力会社の請求書の場合 -->
+        <tr>
+            <td colspan="3">支払期限日</td>
+            <td colspan="12">{{ data.heading.limit_date|date:'Y/m/d' }}</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td colspan="3">部署</td>
+            <td colspan="12">{{ data.request.organization.name }}</td>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        {% else %}
+        <tr>
+            <td colspan="3">注文番号</td>
+            <td colspan="12">{{ data.heading.order_no }}</td>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr>
+            <td colspan="3">注文日</td>
+            <td colspan="12">{{ data.heading.order_date|date:'Y/m/d' }}</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td colspan="3">契約件名</td>
+            <td colspan="12" style="white-space: nowrap;">{{ data.request.request_name }}</td>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        <tr>
+            <td colspan="3">支払期限日</td>
+            <td colspan="12">{{ data.heading.limit_date|date:'Y/m/d' }}</td>
+        </tr>
+        <tr><td colspan="15">&nbsp;</td></tr>
+        {% endif %}
+        <tr class="bordered">
+            <td>番号</td>
+            <td colspan="5">項目</td>
+            <td>単価</td>
+            <td>作業Ｈ</td>
+            <td>率</td>
+            <td>Min/MaxH</td>
+            <td>減</td>
+            <td>増</td>
+            <td>その他</td>
+            <td>金額</td>
+            <td>備考</td>
+        </tr>
+        {% for item in data.details %}
+        <tr class="bordered">
+            <td class="align-right">{{ item.item_no }}</td>
+            <td class="align-left" colspan="5">
+                {% if item.is_blanket_contract %}
+                    一括
+                {% elif item.project %}
+                    {{ item.item_name }}
+                {% endif %}
+            </td>
+            <td class="align-right">
+                {{ item.item_basic_amount|intcomma }}
+            </td>
+            <td class="align-right">{{ item.item_total_hours }}</td>
+            <td class="align-right">{{ item.item_rate }}</td>
+            <td class="align-right">
+                {% if item.is_hourly_pay %}
+                    <!-- 時給の場合、表示しない。 -->
+                {% else %}
+                    {% if item %}{{ item.item_min_hours }}/{{ item.item_max_hours }}{% endif %}
+                {% endif %}
+            </td>
+            <td class="align-right">
+                {% if item.is_hourly_pay %}
+                    <!-- 時給の場合、０を表示。 -->
+                {% else %}
+                    {{ item.item_minus_per_hour|intcomma }}
+                {% endif %}
+            </td>
+            <td class="align-right">
+                {% if item.is_hourly_pay %}
+                    <!-- 時給の場合、０を表示。 -->
+                {% else %}
+                    {{ item.item_plus_per_hour|intcomma }}
+                {% endif %}
+            </td>
+            <td></td>
+            <td class="align-right">{{ item.item_turnover_amount|intcomma }}</td>
+            <td class="align-left">
+                <div style="overflow: hidden; white-space: nowrap;">
+                    {{ item.item_comment|default:'' }}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class="bordered">
+            <td class="align-right"></td>
+            <td colspan="5" class="align-center">（小計）</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-right">{{ data.request.turnover_amount|floatformat:"0"|intcomma }}</td>
+            <td></td>
+        </tr>
+        <tr class="bordered">
+            <td class="align-right"></td>
+            <td colspan="5" class="align-center">（消費税）</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-right">{{ data.request.tax_amount|intcomma }}</td>
+            <td></td>
+        </tr>
+        <tr class="bordered">
+            <td class="align-right"></td>
+            <td colspan="5" class="align-center">（合計）</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-right">{{ data.request.turnover_amount|add:data.request.tax_amount|intcomma }}</td>
+            <td></td>
+        </tr>
+        <tr class="bordered">
+            <td class="align-right"></td>
+            <td colspan="5" class="align-center">[控除、追加]</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-right"></td>
+            <td></td>
+        </tr>
+        <tr class="bordered">
+            <td class="align-left">控除</td>
+            <td colspan="5"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-right"></td>
+            <td></td>
+        </tr>
+        {% if data.expenses %}
+            {% for expense in data.expenses %}
+            <tr class="bordered">
+                <td class="align-left">{% if forloop.counter == 1 %}追加{% endif %}</td>
+                <td style="padding-left: 30px;" colspan="12">{{ expense.category_summary }}</td>
+                <td class="align-right">{{ expense.amount|intcomma }}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+        <tr class="bordered">
+            <td class="align-left">追加</td>
+            <td colspan="5"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-right"></td>
+            <td></td>
+        </tr>
+        {% endif %}
+        <tr class="bordered">
+            <td class="align-right"></td>
+            <td colspan="5" class="align-center">（総計）</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-right">{{ data.request.amount|floatformat:"0"|intcomma }}</td>
+            <td></td>
+        </tr>
+        <tr class="bordered">
+            <td colspan="15" class="border-left bordered-right">お振込銀行口座</td>
+        </tr>
+        <tr>
+            <td class="bordered-left"></td>
+            <td colspan="14" class="bordered-right">{{ data.heading.company_bank_name }}</td>
+        </tr>
+        <tr>
+            <td class="bordered-left"></td>
+            <td colspan="14" class="bordered-right">{{ data.heading.company_branch_name }}（{{ data.heading.company_branch_no }}）</td>
+        </tr>
+        <tr>
+            <td class="bordered-left"></td>
+            <td colspan="14" class="bordered-right">{{ data.heading.company_account_type }}　{{ data.heading.company_account_number }}</td>
+        </tr>
+        <tr>
+            <td class="bordered-left"></td>
+            <td colspan="14" class="bordered-right">名義　　　　{{ data.heading.company_account_holder }}</td>
+        </tr>
+    </table>
+    {% else %}
+        <div class="align-center empty">
+            履歴情報がありません！
+        </div>
+    {% endif %}
+{% endblock content %}

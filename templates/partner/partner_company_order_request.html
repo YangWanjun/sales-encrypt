@@ -1,0 +1,44 @@
+{% extends "common/base_pdf.html" %}
+{% load humanize %}
+
+{% block styles %}
+table {
+    table-layout: fixed;
+    border-image: initial;
+    margin: -10px auto 20px;
+    padding: 0;
+}
+table td {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+table>tbody>tr {
+    height: 30px;
+}
+{% endblock %}
+
+{% block content %}
+    <table class="bordered">
+        <colgroup>
+            <col style="width: 100px"/>
+            <col style="width: 100px"/>
+            <col style="width: 100px"/>
+            <col style="width: 100px"/>
+            <col style="width: 100px"/>
+            <col style="width: 100px"/>
+            <col style="width: 100px"/>
+            <col style="width: 120px"/>
+            <col style="width: 120px"/>
+        </colgroup>
+        {% include 'partner/partner_order_request_head.html' %}
+        <tr><td colspan="9">&nbsp;</td></tr>
+        <tr><td colspan="9">別紙、注文書No.（{{ data.order.order_no }}）に基づき、下記の通りお請け致します。</td></tr>
+        <tr><td colspan="9">&nbsp;</td></tr>
+        <tr>
+            <td colspan="2">承諾日</td>
+            <td colspan="7">{{ data.order.publish_date }}</td>
+        </tr>
+        <tr><td colspan="9">&nbsp;</td></tr>
+        {% include 'partner/partner_company_order_body.html' %}
+    </table>
+{% endblock %}

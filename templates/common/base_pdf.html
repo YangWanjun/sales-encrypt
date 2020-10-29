@@ -1,0 +1,107 @@
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style type="text/css">
+* {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    font-family: "ＭＳ Ｐゴシック";
+}
+div.container {
+    margin: 0 auto;
+    width: 948px;
+    padding-top: 20px;
+    position: relative;
+    font-size: 10pt;
+}
+div.empty {
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.align-left {
+    text-align: left;
+}
+.align-center {
+    text-align: center;
+}
+.align-right {
+    text-align: right;
+}
+.align-top {
+    vertical-align: top;
+}
+.bold {
+    font-weight: bold;
+}
+td.signature {
+    position: relative;
+}
+td.signature img {
+    position: absolute;
+    width: 70px;
+    left: 150px;
+    top: -70%;
+}
+/****************** テーブル ******************/
+div.container>table {
+    table-layout: fixed;
+}
+table {
+    border-spacing: 0;
+}
+table td {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+table tr.bordered th ,
+table tr.bordered td {
+    border-left: 1px solid #000000;
+    border-top: 1px solid #000000;
+}
+table tr.bordered th:last-child ,
+table tr.bordered td:last-child {
+    border-right: 1px solid #000000;
+}
+table th.bordered-left ,
+table td.bordered-left {
+    border-left: 1px solid #000000;
+}
+table th.bordered-left-none ,
+table td.bordered-left-none {
+    border-left-width: 0 !important;
+}
+table th.bordered-right ,
+table td.bordered-right {
+    border-right: 1px solid #000000;
+}
+table th.bordered-right-none ,
+table td.bordered-right-none {
+    border-right-width: 0 !important;
+}
+table th.bordered-top ,
+table td.bordered-top {
+    border-top: 1px solid #000000;
+}
+table th.bordered-top-none ,
+table td.bordered-top-none {
+    border-top-width: 0 !important;
+}
+table th.bordered-bottom ,
+table td.bordered-bottom {
+    border-bottom: 1px solid #000000;
+}
+table tr.bordered th.bordered-none ,
+table tr.bordered td.bordered-none {
+    border: none;
+}
+{% block styles %}{% endblock %}
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

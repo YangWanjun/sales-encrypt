@@ -1,0 +1,17 @@
+{% extends "rest_framework/base.html" %}
+{% load static %}
+
+{# Override this template in your own templates directory to customize #}
+{% block title %}
+社内基幹システム | API
+{% endblock %}
+
+{% block meta %}
+    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" />
+{% endblock %}
+
+{% block branding %}
+    <a class='navbar-brand' rel="nofollow" href='javascript:void(0)'>
+        社内基幹システム - API
+    </a>
+{% endblock %}
