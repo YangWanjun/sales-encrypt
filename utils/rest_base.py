@@ -123,10 +123,11 @@ class BaseModelSerializer(ModelSerializer):
                 log_action_for_change(request.user, instance, changed_data)
         return instance
 
-    def get_changed_message(self, original_data):
+    def get_changed_message(self, original_data, prev_msg=None):
         """変更メッセージを取得する
 
         :param original_data: 変更前のデータ
+        :param prev_msg: 変更メッセージの先頭文字
         :return:
         """
         changed_data = []
@@ -135,7 +136,8 @@ class BaseModelSerializer(ModelSerializer):
             # validated_dataから取得したら、Python型に変更済みのデータになってします。
             new_value = self.data.get(key)
             if old_value != new_value:
-                changed_data.append('{} を {} から {} に変更しました。'.format(
+                changed_data.append('{}{} を {} から {} に変更しました。'.format(
+                    (prev_msg + 'の') if prev_msg else '',
                     self.fields.get(key).label,
                     old_value if old_value != '' else None,
                     new_value if new_value != '' else None,

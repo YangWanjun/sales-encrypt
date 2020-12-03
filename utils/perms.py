@@ -63,6 +63,19 @@ class PartnerMemberContractPermission(SalesModelPermission):
         return [perm % kwargs for perm in self.perms_map[method]]
 
 
+class ProjectBlanketContractPermission(SalesModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        kwargs = {
+            'app_label': 'project',
+            'model_name': 'projectcontract',
+        }
+        if method not in self.perms_map:
+            raise exceptions.MethodNotAllowed(method)
+
+        return [perm % kwargs for perm in self.perms_map[method]]
+
+
 class SalesObjectPermission(DjangoObjectPermissions):
 
     def has_permission(self, request, view):

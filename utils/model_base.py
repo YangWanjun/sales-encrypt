@@ -218,6 +218,16 @@ class AbstractMember(BaseModel):
     def address(self):
         return '{}{}'.format(self.address1 or '', self.address2 or '')
 
+    @property
+    def salesperson(self):
+        if not self.salesperson_id:
+            return None
+        try:
+            from member.models import Salesperson
+            return Salesperson.objects.get(pk=self.salesperson_id)
+        except ObjectDoesNotExist:
+            return None
+
     @classmethod
     def get_next_member_code(cls, *args, **kwargs):
         raise NotImplementedError

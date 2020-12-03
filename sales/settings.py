@@ -125,9 +125,12 @@ DATABASES = {
 }
 
 if 'test' in sys.argv:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test_db.sqlite',
+    # (1071, 'Specified key was too long; max key length is 767 bytes')を回避するため
+    # innodb_large_prefixを有効にすることでキープレフィックスの制限を3072バイトまで拡張することができるとのこと
+    DATABASES['default']['OPTIONS'] = {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES';"
+                        "SET innodb_file_format=BARRACUDA;"
+                        "SET innodb_large_prefix=ON",
     }
 elif os.environ.get('CONTAINER_NAME') == 'sales-test':
     DATABASES['default']['NAME'] = 'sales_test'

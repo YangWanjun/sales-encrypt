@@ -235,7 +235,10 @@ def log_action(user, instance, action_flg, message):
 
 
 def log_action_for_add(user, instance):
-    log_action(user, instance, ADDITION, '[{"added": {}}]')
+    added_data = []
+    for field in instance._meta.fields:
+        added_data.append('{}を {} に設定しました。'.format(field.verbose_name, getattr(instance, field.name)))
+    log_action(user, instance, ADDITION, '\n'.join(added_data))
 
 
 def log_action_for_delete(user, instance):
