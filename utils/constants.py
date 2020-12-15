@@ -769,6 +769,7 @@ ERROR_REQUIRE_FIELD_CASE = '{condition}の場合、{name} は必須項目です�
 ERROR_REQUIRE_DATA = '{name} は必要です。'
 ERROR_REQUIRE_NEITHER = '{name1}または{name2}は必要です。'
 ERROR_REQUIRE_ATTENDANCE = '{name}は{year}年{month}月の勤務時間が未入力です。'
+ERROR_REQUIRE_PROJECT = 'まだ案件にアサインしていないメンバーがいます。'
 ERROR_MULTIPLE_COMPANY_YM = '{name} が同じ会社かつ同じ年月であることが必要です。'
 ERROR_UNCOMPLICATED_PAYMENT_NOTICE = '支払通知書はまだ全部作成されていません。'
 ERROR_ORGANIZATION_POSITION = '{org_type} の場合 {value} は選択できません。'
