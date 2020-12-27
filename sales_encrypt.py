@@ -1,11 +1,14 @@
 import os
 import shutil
+import sys
 import glob
 import git
 
 
-SRC_DIR = 'sales'
-DST_DIR = 'sales-encrypt'
+CUR_DIR = os.path.dirname(sys.argv[0])
+ROOT = os.path.dirname(CUR_DIR)
+SRC_DIR = os.path.join(ROOT, 'sales')
+DST_DIR = os.path.join(ROOT, 'sales-encrypt')
 
 
 
@@ -40,6 +43,9 @@ def copy_changed_files():
     repo = git.Repo(SRC_DIR)
     diff_files = repo.git.diff(name_only=True).splitlines()
     for f in diff_files:
+        name, ext = os.path.splitext(f)
+        if ext != '.py':
+            continue
         dst_file = os.path.join(DST_DIR, f)
         pye_file = dst_file + 'e'
         if os.path.exists(pye_file):
