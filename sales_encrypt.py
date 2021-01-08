@@ -5,7 +5,7 @@ import glob
 import git
 
 
-CUR_DIR = os.path.dirname(sys.argv[0])
+CUR_DIR = os.path.dirname(os.path.abspath(sys.argv[0]))
 ROOT = os.path.dirname(CUR_DIR)
 SRC_DIR = os.path.join(ROOT, 'sales')
 DST_DIR = os.path.join(ROOT, 'sales-encrypt')
@@ -31,9 +31,9 @@ def main():
         files = glob.iglob(os.path.join(src_dir, "*.py"))
         for file in files:
             name = os.path.basename(file)
-            if name == "__init__.py":
-                continue
-            command = "sourcedefender encrypt --ttl=10000d {}/{}".format(d, name)
+            # if name == "__init__.py":
+            #     continue
+            command = "sourcedefender encrypt --ttl=10000d --remove {}/{}".format(d, name)
             lst_encrypt.append(command)
     for i in lst_cache:
         print(i)

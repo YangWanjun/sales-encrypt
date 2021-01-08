@@ -50,6 +50,19 @@ class ProjectMemberContractPermission(SalesModelPermission):
         return [perm % kwargs for perm in self.perms_map[method]]
 
 
+class PartnerCompanyPermission(SalesModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        kwargs = {
+            'app_label': 'partner',
+            'model_name': 'partnercompany',
+        }
+        if method not in self.perms_map:
+            raise exceptions.MethodNotAllowed(method)
+
+        return [perm % kwargs for perm in self.perms_map[method]]
+
+
 class PartnerMemberContractPermission(SalesModelPermission):
 
     def get_required_permissions(self, method, model_cls):
