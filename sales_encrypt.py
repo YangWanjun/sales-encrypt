@@ -13,16 +13,16 @@ DST_DIR = os.path.join(ROOT, 'sales-encrypt')
 
 
 def main():
-    if not os.path.exists('sales'):
+    if not os.path.exists(SRC_DIR):
         print('sales does not exists')
         return
 
     lst_cache = []
     lst_encrypt = []
-    for d in os.listdir('sales'):
+    for d in os.listdir(SRC_DIR):
         if d in ('.git', '.gitignore', '.idea', 'data', 'log', 'media', 'static', 'templates', 'sales', 'utils'):
             continue
-        src_dir = os.path.join('sales', d)
+        src_dir = os.path.join(SRC_DIR, d)
         if os.path.isfile(src_dir):
             continue
         # フォルダーの場合
@@ -31,6 +31,8 @@ def main():
         files = glob.iglob(os.path.join(src_dir, "*.py"))
         for file in files:
             name = os.path.basename(file)
+            if name == "__init__.py":
+                continue
             command = "sourcedefender encrypt --ttl=10000d {}/{}".format(d, name)
             lst_encrypt.append(command)
     for i in lst_cache:
@@ -58,8 +60,8 @@ def copy_changed_files():
         dir_name = os.path.basename(os.path.dirname(dst_file))
         if dir_name in ('utils'):
             continue
-        print("sourcedefender encrypt --ttl=10000d {}".format(f))
+        print("sourcedefender encrypt --ttl=10000d --remove {}".format(f))
 
 
 if __name__ == '__main__':
-    copy_changed_files()
+    main()
