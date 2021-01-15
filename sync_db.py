@@ -1,6 +1,7 @@
 import os
 import sys
 import django
+import sourcedefender
 from django.core.management import call_command
 from django.db import connection
 
