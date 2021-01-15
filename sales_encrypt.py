@@ -56,6 +56,9 @@ def copy_changed_files():
         if not os.path.exists(src_file):
             print('ファイルが見つからない', f)
             return
+        folder_name = os.path.basename(os.path.dirname(src_file))
+        if folder_name == "sales":
+            continue
         shutil.copyfile(src_file, dst_file)
         dir_name = os.path.basename(os.path.dirname(dst_file))
         if dir_name in ('utils'):
@@ -64,4 +67,4 @@ def copy_changed_files():
 
 
 if __name__ == '__main__':
-    main()
+    copy_changed_files()
